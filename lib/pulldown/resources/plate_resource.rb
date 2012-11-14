@@ -13,7 +13,7 @@ module Lims::Api
 
         s.add_key "state"
         #s.add_value "pending"
-        s.add_value "started"
+        s.add_value "passed"
 
         s.add_key "created_at"
         s.add_value "2012/12/25"
