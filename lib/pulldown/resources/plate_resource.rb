@@ -5,6 +5,8 @@ module Lims::Api
     class PlateResource
 	    
       def content_to_stream(s, mime_type)
+        dimensions_to_stream(s)
+        
         s.add_key "pools"
         pools_to_stream(s, mime_type)
         
@@ -17,15 +19,6 @@ module Lims::Api
 
         s.add_key "created_at"
         s.add_value "2012/12/25"
-
-        s.add_key "dimension"
-        s.with_hash do
-          s.add_key "number_of_rows"
-          s.add_value object.number_of_rows
-
-          s.add_key "number_of_columns"
-          s.add_value object.number_of_columns
-        end
 
         s.add_key "plate_purpose"
         s.with_hash do
