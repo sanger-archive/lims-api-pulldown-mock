@@ -64,8 +64,8 @@ module Lims
           h["barcode_printers"] = {"actions" => {"first" => "#{path}barcode_printers"}}
           h["state_changes"] = {"actions" => {"first" => "#{path}state_changes", "create" => "#{path}state_changes"}}
           h["transfer_templates"] = {"actions" => {"first" => "#{path}transfer_templates"}}
-          h["plate_creations"] = {"actions" => {"create" => "#{path}plates"}}
-          #h["plate_creations"] = {"actions" => {"create" => "#{path}actions/create_plate"}}
+          #h["plate_creations"] = {"actions" => {"create" => "#{path}plates"}}
+          h["plate_creations"] = {"actions" => {"create" => "#{path}actions/create_plate", "first" => "#{path}actions/create_plate"}}
           h.to_json
         end
 
@@ -98,11 +98,6 @@ module Lims
           h = JSON.parse(body.first)
           h["plates"].first.to_json
         end
-
-        #post '/plate_creations' do
-        #  headers({"Content-Type" => "application/json"})
-        #  {}.to_json
-        #end
 
         #get '/pulldown/transfer-columns' do
         #  path = request.url
