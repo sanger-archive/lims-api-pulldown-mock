@@ -14,8 +14,7 @@ module Lims::Api
         wells_to_stream(s, mime_type)
 
         s.add_key "state"
-        #s.add_value "pending"
-        s.add_value "passed"
+        s.add_value state 
 
         s.add_key "created_at"
         s.add_value "2012/12/25"
@@ -52,6 +51,35 @@ module Lims::Api
         s.add_key "creation_transfer"
         s.add_value Hash.new
       end
+
+
+      def sequencescape_state_mapper(state)
+        case state
+        when "in_progress" then "started"
+        when "done" then "passed"
+        else state
+        end
+      end
+
+    
+      def order_uuid
+        "8f590480-1b7d-0130-7e1e-282066132de2"
+      end
+
+
+      def state
+        @context.with_session do |s|
+          order = s[order_uuid]
+          lambda { 
+            order.values.each do |item|
+              if item.uuid == self.uuid
+                return sequencescape_state_mapper(item.status.to_s) 
+              end
+            end
+          }
+        end.call
+      end
+
 
       def pools_to_stream(s, mime_type)
         s.with_hash do
