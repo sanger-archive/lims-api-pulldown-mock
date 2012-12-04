@@ -1,5 +1,6 @@
 require 'lims-api/server'
 require 'pulldown/resources/plate_resource'
+
 require 'rubygems'
 require 'ruby-debug/debugger'
 
@@ -26,14 +27,12 @@ module Lims
         end
 
         post '/pulldown/search-:extra/all' do
-          _status, header, body= call(env.merge("PATH_INFO" => '/plates/page=1', "REQUEST_METHOD" => "GET"))
+          _status, header, body = call(env.merge("PATH_INFO" => '/plates/page=1', "REQUEST_METHOD" => "GET"))
 	        status 300
           headers({"Content-Type" => header["Content-Type"]})
           h = JSON.parse(body.first)
           h["actions"]["all"] = h["plates"]
-          [{"searches" => h["plates"].map { |p| p["plate"].merge({:state => "mocked state",
-                                                                 :created_at => "2012/12/25",
-                                                                 :plate_purpose => {:name => "plate purpose"} })},
+          [{"searches" => h["plates"].map { |p| p["plate"]},
             "size" => h["size"], 
             "success" => 1
           }.to_json]
@@ -78,7 +77,7 @@ module Lims
             "read" => "#{path}",
             "last" => "#{path}"}}.to_json
         end
-        
+
         get '/transfer_templates_1_12' do
           path_preview = request.url
           path = path_preview - request.env["PATH_INFO"]

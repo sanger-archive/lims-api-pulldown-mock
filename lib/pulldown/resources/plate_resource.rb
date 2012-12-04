@@ -22,9 +22,9 @@ module Lims::Api
         s.add_key "plate_purpose"
         s.with_hash do
           s.add_key "uuid"
-          s.add_value "pulldown_purpose_1"
+          s.add_value purpose_uuid
           s.add_key "name"
-          s.add_value "Pulldown purpose name"
+          s.add_value purpose_uuid
           s.add_key "actions"
           s.with_hash do
             s.add_key "read"
@@ -52,6 +52,27 @@ module Lims::Api
         s.add_value Hash.new
       end
 
+      def order_uuid
+        "4e52bfb0-204d-0130-7f9f-282066132de2"
+      end
+
+      def item
+        @order_item ||= @context.store.with_session do |s|
+          order = s[order_uuid]
+          lambda {
+            order.keys.each do |key|
+              if order[key].uuid == self.uuid
+                return OpenStruct.new(:role => key.to_s, :status => order[key].status.to_s)
+              end
+            end
+          }
+        end.call
+        @order_item
+      end
+
+      def purpose_uuid
+        item.role
+      end
 
       def sequencescape_state_mapper(state)
         case state
@@ -61,25 +82,9 @@ module Lims::Api
         end
       end
 
-    
-      def order_uuid
-        "8f590480-1b7d-0130-7e1e-282066132de2"
-      end
-
-
       def state
-        @context.with_session do |s|
-          order = s[order_uuid]
-          lambda { 
-            order.values.each do |item|
-              if item.uuid == self.uuid
-                return sequencescape_state_mapper(item.status.to_s) 
-              end
-            end
-          }
-        end.call
+        sequencescape_state_mapper(item.status)
       end
-
 
       def pools_to_stream(s, mime_type)
         s.with_hash do
@@ -90,7 +95,6 @@ module Lims::Api
           end
         end
       end
-     
     end
   end
 end  
