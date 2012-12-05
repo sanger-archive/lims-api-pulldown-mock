@@ -65,6 +65,7 @@ module Lims::Api
                 return OpenStruct.new(:role => key.to_s, :status => order[key].status.to_s)
               end
             end
+            return OpenStruct.new(:role => "mocked", :status => "mocked")
           }
         end.call
         @order_item
