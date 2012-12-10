@@ -1,5 +1,6 @@
 require 'lims-api/server'
 require 'pulldown/resources/plate_resource'
+require 'pulldown/resources/tube_resource'
 
 require 'rubygems'
 require 'ruby-debug/debugger'
