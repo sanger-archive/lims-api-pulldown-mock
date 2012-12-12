@@ -65,6 +65,7 @@ module Lims
           h["state_changes"] = {"actions" => {"first" => "#{path}state_changes", "create" => "#{path}state_changes"}}
           h["transfer_templates"] = {"actions" => {"first" => "#{path}transfer_templates"}}
           h["plate_creations"] = {"actions" => {"create" => "#{path}plates"}}
+          h["tag_layout_templates"] = {"actions" => {"first" => "#{path}tag_layout_templates"}}
           h.to_json
         end
 
@@ -82,6 +83,40 @@ module Lims
         post '/state_changes' do
          headers({"Content-Type" => "application/json"})
          {}.to_json 
+        end
+
+        get '/tag_layout_templates' do
+          path = request.url
+          headers({"Content-Type" => "application/json"})
+          tags = Hash[(1..96).to_a.map {|n| [n.to_s, "ACGT#{n}"]}]
+          {"tag_layout_templates" => [
+            {
+              "tag_group" => {
+                "tags" => tags, 
+                "name"=>"Tagging",
+                "updated_at"=>"2012-11-20T16:46:07+00:00",
+                "created_at"=>"2012-11-20T16:46:07+00:00",
+                "uuid"=>"pulldown_tagging_template",
+                "direction"=>"column",
+                "walking_by"=>"wells in pools"
+              },
+              "direction"=>"column",
+              "name"=>"Old 12 TagTubes - do not use in column major order",
+              "updated_at"=>"2012-11-20T16:46:14+00:00",
+              "created_at"=>"2012-11-20T16:46:14+00:00",
+              "actions"=>{
+                "create"=>"#{path}",
+                "read"=>"#{path}"
+              },
+              "walking_by"=>"wells in pools",
+              "uuid"=>"cbe6b900-3331-11e2-9adf-406c8ffffeb6"
+            }],
+          "actions" => {
+                  "first" => "#{path}",
+                  "read" => "#{path}",
+                  "last" => "#{path}"
+               },
+             "size" => 1}.to_json
         end
 
         get '/pulldown/find-assets-by-barcode' do
