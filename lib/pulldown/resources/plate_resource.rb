@@ -1,8 +1,11 @@
 require 'lims-api/resources/plate_resource'
+require 'pulldown/resources/order.rb'
 
 module Lims::Api
   module Resources
     class PlateResource
+      include Order
+      include MockedReceptacle
 	    
       def content_to_stream(s, mime_type)
         dimensions_to_stream(s)
@@ -14,8 +17,7 @@ module Lims::Api
         wells_to_stream(s, mime_type)
 
         s.add_key "state"
-        #s.add_value "pending"
-        s.add_value "passed"
+        s.add_value state 
 
         s.add_key "created_at"
         s.add_value "2012/12/25"
@@ -23,9 +25,9 @@ module Lims::Api
         s.add_key "plate_purpose"
         s.with_hash do
           s.add_key "uuid"
-          s.add_value "pulldown_purpose_1"
+          s.add_value purpose_uuid
           s.add_key "name"
-          s.add_value "Pulldown purpose name"
+          s.add_value purpose_uuid
           s.add_key "actions"
           s.with_hash do
             s.add_key "read"
@@ -62,7 +64,6 @@ module Lims::Api
           end
         end
       end
-     
     end
   end
 end  
