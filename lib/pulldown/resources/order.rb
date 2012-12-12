@@ -3,7 +3,7 @@ module Lims::Api
     module Order
 
       def order_uuid
-        "15912d50-25da-0130-80ec-282066132de2"
+        "6a9ff110-2678-0130-810c-282066132de2"
       end
 
       def item

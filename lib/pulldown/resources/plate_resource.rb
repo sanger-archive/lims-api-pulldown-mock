@@ -5,6 +5,7 @@ module Lims::Api
   module Resources
     class PlateResource
       include Order
+      include MockedReceptacle
 	    
       def content_to_stream(s, mime_type)
         dimensions_to_stream(s)

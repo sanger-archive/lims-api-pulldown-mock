@@ -1,4 +1,5 @@
 require 'lims-api/server'
+require 'pulldown/resources/receptacle'
 require 'pulldown/resources/plate_resource'
 require 'pulldown/resources/tube_resource'
 
